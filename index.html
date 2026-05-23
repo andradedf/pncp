@@ -746,7 +746,7 @@ function extract(j){
   };
   // Busca regex no JSON completo como fallback
   var raw=JSON.stringify(j);
-  if(!res.tel){var m=raw.match(/(\(?\d{2}\)?\s?\d{4,5}[-\s]?\d{4})/);if(m)res.tel=m[1];}
+  if(!res.tel){var m=raw.match(/(\(?\d{2}\)?\s?\d{4,5}[-\s]?\d{4})/);if(m)res.tel=m[1];}
   if(!res.email){var m2=raw.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);if(m2&&m2[0].indexOf('pncp.gov')<0)res.email=m2[0];}
   res.status=(res.nome||res.tel||res.email||res.cpf)?'found':'empty';
   return res;
