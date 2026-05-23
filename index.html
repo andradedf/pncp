@@ -378,37 +378,87 @@ async function fetchBaserowAll(){
   return rows;
 }
 
+// Detecta o mapeamento de campos do Baserow na primeira linha
+let _fieldMap = null;
+function detectFieldMap(r){
+  if(_fieldMap) return;
+  _fieldMap = {};
+  const keys = Object.keys(r);
+  // Log para debug no console
+  console.log('[PNCP] Campos do Baserow:', keys);
+  console.log('[PNCP] Exemplo de linha:', r);
+  // Tenta mapear pelos nomes exatos ou por similaridade
+  const candidates = {
+    local: ['local'],
+    orgao: ['orgao','órgão','orgão'],
+    cnpjOrgao: ['cnpjorgao','cnpjórgão','cnpj_orgao'],
+    objeto: ['objeto'],
+    valorContratado: ['valorcontratado','valor_contratado','valor contratado'],
+    valorContratadoFormatado: ['valorcontratadoformatado','valor_contratado_formatado'],
+    fornecedorRazaoSocial: ['fornecedorrazaosocial','fornecedor_razao_social','fornecedorrazãosocial','razaosocial'],
+    fornecedorCnpjCpf: ['fornecedorcnpjcpf','fornecedor_cnpj_cpf','cnpj'],
+    dataAssinatura: ['dataassinatura','data_assinatura','data assinatura'],
+    vigenciaFim: ['vigenciafim','vigencia_fim','vigência_fim'],
+    linkPNCP: ['linkpncp','link_pncp','link'],
+    idContratoPNCP: ['idcontratopncp','id_contrato_pncp'],
+    processo: ['processo'],
+  };
+  keys.forEach(k => {
+    const kl = k.toLowerCase().replace(/[^a-z0-9]/g,'');
+    Object.entries(candidates).forEach(([field, alts]) => {
+      if(!_fieldMap[field] && alts.some(a => a.replace(/[^a-z0-9]/g,'') === kl)) {
+        _fieldMap[field] = k;
+      }
+    });
+    // fallback: nome exato
+    if(!_fieldMap[k] && candidates[k]) _fieldMap[k] = k;
+  });
+  console.log('[PNCP] Mapeamento de campos:', _fieldMap);
+}
+
+function g(r, field){
+  if(!_fieldMap) return '';
+  const k = _fieldMap[field];
+  return k ? (r[k]||'') : '';
+}
+
 function mapRow(r){
-  // Mapeia campos do Baserow para o formato esperado pelo painel
-  const local = r.local||'';
+  detectFieldMap(r);
+
+  const local = g(r,'local')||'';
   const localParts = local.split('/');
   const cidade = localParts[0]||'';
-  const estado = localParts[1]||'';
+  const estado = (localParts[1]||'').trim();
 
-  // Extrai cnpj, ano, seq do idContratoPNCP ex: "89522064000166-2-000046/2026"
-  const id = r.idContratoPNCP||'';
+  const id = g(r,'idContratoPNCP')||'';
   const idParts = id.match(/^(\d+)-\d+-(\d+)\/(\d+)$/);
-  const cnpj = idParts?idParts[1]:(r.cnpjOrgao||'').replace(/\D/g,'');
+  const cnpjOrgao = g(r,'cnpjOrgao')||'';
+  const cnpj = idParts?idParts[1]:cnpjOrgao.replace(/\D/g,'');
   const seq  = idParts?parseInt(idParts[2]):0;
   const ano  = idParts?idParts[3]:'2026';
 
-  const valorNum = parseFloat((r.valorContratado||'0').toString().replace(/[R$\s.]/g,'').replace(',','.')) || 0;
+  const valorRaw = g(r,'valorContratado')||'0';
+  const valorNum = parseFloat(valorRaw.toString().replace(/[R$\s.]/g,'').replace(',','.')) || 0;
+  const valorFmt = g(r,'valorContratadoFormatado')||('R$ '+valorNum.toLocaleString('pt-BR',{minimumFractionDigits:2}));
+
+  const fornecedor = (g(r,'fornecedorRazaoSocial')||'').toUpperCase();
+  const fornecedorCnpj = g(r,'fornecedorCnpjCpf')||'';
 
   return {
     cnpj, ano: String(ano), seq: String(seq),
-    orgao: r.orgao||'',
-    cnpjOrgao: r.cnpjOrgao||'',
+    orgao: g(r,'orgao')||'',
+    cnpjOrgao,
     local, cidade, estado,
-    objeto: r.objeto||'',
-    fornecedor: (r.fornecedorRazaoSocial||'').toUpperCase(),
-    fornecedorCnpj: r.fornecedorCnpjCpf||'',
-    valor: r.valorContratadoFormatado||('R$ '+valorNum.toLocaleString('pt-BR',{minimumFractionDigits:2})),
+    objeto: g(r,'objeto')||'',
+    fornecedor,
+    fornecedorCnpj,
+    valor: valorFmt,
     valorNum,
-    dataAssinatura: (r.dataAssinatura||'').slice(0,10),
-    vigenciaFim: (r.vigenciaFim||'').slice(0,10),
-    tipo: r.tipo||'',
-    processo: r.processo||'',
-    link: r.linkPNCP||'',
+    dataAssinatura: (g(r,'dataAssinatura')||'').slice(0,10),
+    vigenciaFim: (g(r,'vigenciaFim')||'').slice(0,10),
+    tipo: g(r,'tipo')||'',
+    processo: g(r,'processo')||'',
+    link: g(r,'linkPNCP')||'',
     idContratoPNCP: id,
   };
 }
