@@ -86,7 +86,7 @@ header h1{font-size:13px;font-weight:500;}
 .sum-main{font-family:var(--mono);font-size:24px;font-weight:600;color:var(--accent);line-height:1;}
 .sum-sub{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:5px;}
 .sum-rows{margin-top:10px;display:flex;flex-direction:column;}
-.sum-row{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:1px solid var(--border);}
+.sum-row{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:1px solid var(--border);transition:background .15s;border-radius:4px;padding-left:4px;padding-right:4px;}.sum-row.clickable{cursor:pointer;}.sum-row.clickable:hover{background:rgba(79,142,255,.07);}
 .sum-row:last-child{border-bottom:none;}
 .sum-label{font-size:11px;color:var(--text);display:flex;align-items:center;gap:5px;overflow:hidden;max-width:185px;text-overflow:ellipsis;white-space:nowrap;}
 .sum-val{font-family:var(--mono);font-size:10px;color:var(--muted);white-space:nowrap;margin-left:6px;}
@@ -186,7 +186,7 @@ tr:last-child td{border-bottom:none;}tr:hover td{background:rgba(255,255,255,.01
 <div class="page active" id="page-dash">
 <div class="gov-total"><div><div class="gov-total-label">Total contratado pelo governo</div><div class="gov-total-val">R$ 12.758.000</div><div class="gov-total-sub">soma de todos os contratos nesta base · 668 contratos</div></div><div class="gov-divider"></div><div class="gov-stat"><div class="gov-stat-v">26</div><div class="gov-stat-l">Estados</div></div><div class="gov-divider"></div><div class="gov-stat"><div class="gov-stat-v">88</div><div class="gov-stat-l">Empresas</div></div><div class="gov-divider"></div><div class="gov-stat"><div class="gov-stat-v">R$ 19.209</div><div class="gov-stat-l">Ticket médio</div></div><div class="gov-divider"></div><div class="gov-stat"><div class="gov-stat-v">R$ 488.711</div><div class="gov-stat-l">Maior contrato</div></div></div>
 <div class="bp-hero"><div><div class="bp-badge">★ Nossa Empresa</div><div class="bp-name">Instituto Brasil Planeja Ltda</div><div class="bp-sub">Desempenho no mercado de contratos públicos PNCP</div></div><div class="bp-kpis"><div class="bp-kpi"><div class="bp-kpi-v">R$ 257.660</div><div class="bp-kpi-l">Valor acumulado</div></div><div class="bp-kpi"><div class="bp-kpi-v">20</div><div class="bp-kpi-l">Contratos</div></div><div class="bp-kpi"><div class="bp-kpi-v">2.0%</div><div class="bp-kpi-l">Market share</div></div><div class="bp-kpi"><div class="bp-kpi-v">R$ 12.883</div><div class="bp-kpi-l">Ticket médio</div></div></div><div class="bp-rank-box"><div class="bp-rank-num">#18</div><div class="bp-rank-label">entre 88 empresas</div></div></div>
-<div class="sum-cards"><div class="sum-card"><div class="sum-card-title">Resumo do Mercado</div><div class="sum-main">R$ 12.754.850</div><div class="sum-sub">valor total nesta seleção</div><div class="sum-rows"><div class="sum-row"><span class="sum-label">Contratos</span><span class="sum-val">668</span></div><div class="sum-row"><span class="sum-label">Empresas únicas</span><span class="sum-val">88</span></div><div class="sum-row"><span class="sum-label">Maior contrato</span><span class="sum-val">R$ 488.711</span></div><div class="sum-row"><span class="sum-label">Menor contrato</span><span class="sum-val">R$ 0</span></div><div class="sum-row"><span class="sum-label">Ticket médio</span><span class="sum-val">R$ 19.209</span></div></div></div><div class="sum-card"><div class="sum-card-title">Top 10 Estados por Valor <span style="font-size:8px;color:var(--accent)">· clique no gráfico para ver contratos</span></div><div class="sum-rows"><div class="sum-row"><span class="sum-label"><span class="uf">RJ</span>&nbsp;R$ 1.854.412</span><div style="text-align:right"><div class="sum-val">66 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="VALERIOTE CURSOS, CONSULTORI…">VALERIOTE CURSOS, CONSULTORI…</div></div></div><div class="sum-row"><span class="sum-label"><span class="uf">DF</span>&nbsp;R$ 1.750.943</span><div style="text-align:right"><div class="sum-val">87 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="CONNECT ON MARKETING DE EVEN…">CONNECT ON MARKETING DE EVEN…</div></div></div><div class="sum-row"><span class="sum-label"><span class="uf">SP</span>&nbsp;R$ 1.266.510</span><div style="text-align:right"><div class="sum-val">45 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="INSTITUTO PROTEGE ESCOLA BRA…">INSTITUTO PROTEGE ESCOLA BRA…</div></div></div><div class="sum-row"><span class="sum-label"><span class="uf">SC</span>&nbsp;R$ 863.480</span><div style="text-align:right"><div class="sum-val">32 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="LICITO GURU TECNOLOGIA E EDU…">LICITO GURU TECNOLOGIA E EDU…</div></div></div><div class="sum-row"><span class="sum-label"><span class="uf">MG</span>&nbsp;R$ 795.124</span><div style="text-align:right"><div class="sum-val">92 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="INSTITUTO DE DESENVOLVIMENTO…">INSTITUTO DE DESENVOLVIMENTO…</div></div></div><div class="sum-row"><span class="sum-label"><span class="uf">GO</span>&nbsp;R$ 705.158</span><div style="text-align:right"><div class="sum-val">59 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="EXCELENCIA EDUCACAO E ENSINO…">EXCELENCIA EDUCACAO E ENSINO…</div></div></div><div class="sum-row"><span class="sum-label"><span class="uf">CE</span>&nbsp;R$ 678.884</span><div style="text-align:right"><div class="sum-val">18 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="SEGE - SISTEMAS DE EDUCACAO …">SEGE - SISTEMAS DE EDUCACAO …</div></div></div><div class="sum-row"><span class="sum-label"><span class="uf">RO</span>&nbsp;R$ 617.455</span><div style="text-align:right"><div class="sum-val">22 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="LICITO GURU TECNOLOGIA E EDU…">LICITO GURU TECNOLOGIA E EDU…</div></div></div><div class="sum-row"><span class="sum-label"><span class="uf">SE</span>&nbsp;R$ 541.647</span><div style="text-align:right"><div class="sum-val">10 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="DLSJ-DISTRIBUIDORA DE LIVROS…">DLSJ-DISTRIBUIDORA DE LIVROS…</div></div></div><div class="sum-row"><span class="sum-label"><span class="uf">MA</span>&nbsp;R$ 533.502</span><div style="text-align:right"><div class="sum-val">24 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="SLA NEGOCIOS LTDA">SLA NEGOCIOS LTDA</div></div></div></div></div><div class="sum-card"><div class="sum-card-title">Top 10 Concorrentes por Valor</div><div class="sum-rows"><div class="sum-row"><span class="sum-label" title="CONNECT ON MARKETING DE EVENTOS LTDA">CONNECT ON MARKETING DE EV…</span><span class="sum-val">R$ 1.128.870</span></div><div class="sum-row"><span class="sum-label" title="LICITO GURU TECNOLOGIA E EDUCACAO LTDA">LICITO GURU TECNOLOGIA E E…</span><span class="sum-val">R$ 939.912</span></div><div class="sum-row"><span class="sum-label" title="VALERIOTE CURSOS, CONSULTORIA, GESTAO E EMPREENDIMENTOS LTDA">VALERIOTE CURSOS, CONSULTO…</span><span class="sum-val">R$ 819.109</span></div><div class="sum-row"><span class="sum-label" title="startgov solucoes em tecnologia ltda">startgov solucoes em tecno…</span><span class="sum-val">R$ 769.056</span></div><div class="sum-row"><span class="sum-label" title="ORZIL CONSULTORIA E TREINAMENTO LTDA">ORZIL CONSULTORIA E TREINA…</span><span class="sum-val">R$ 741.625</span></div><div class="sum-row"><span class="sum-label" title="INSTITUTO NEGOCIOS PUBLICOS DO BRASIL - ESTUDOS E PESQUISAS NA ADMINISTRACAO PUBLICA - INP - LTDA">INSTITUTO NEGOCIOS PUBLICO…</span><span class="sum-val">R$ 564.234</span></div><div class="sum-row"><span class="sum-label" title="SEGE - SISTEMAS DE EDUCACAO E GESTAO DE EXCELENCIA LTDA">SEGE - SISTEMAS DE EDUCACA…</span><span class="sum-val">R$ 488.711</span></div><div class="sum-row"><span class="sum-label" title="DLSJ-DISTRIBUIDORA DE LIVROS SAO JOSE LTDA">DLSJ-DISTRIBUIDORA DE LIVR…</span><span class="sum-val">R$ 482.028</span></div><div class="sum-row"><span class="sum-label" title="VIRTÚ SOLUÇÕES EM GESTÃO PÚBLICA LTDA">VIRTÚ SOLUÇÕES EM GESTÃO P…</span><span class="sum-val">R$ 444.935</span></div><div class="sum-row"><span class="sum-label" title="INSTITUTO PROTEGE ESCOLA BRASIL LTDA">INSTITUTO PROTEGE ESCOLA B…</span><span class="sum-val">R$ 418.084</span></div></div></div></div>
+<div class="sum-cards"><div class="sum-card"><div class="sum-card-title">Resumo do Mercado</div><div class="sum-main">R$ 12.754.850</div><div class="sum-sub">valor total nesta seleção</div><div class="sum-rows"><div class="sum-row"><span class="sum-label">Contratos</span><span class="sum-val">668</span></div><div class="sum-row"><span class="sum-label">Empresas únicas</span><span class="sum-val">88</span></div><div class="sum-row"><span class="sum-label">Maior contrato</span><span class="sum-val">R$ 488.711</span></div><div class="sum-row"><span class="sum-label">Menor contrato</span><span class="sum-val">R$ 0</span></div><div class="sum-row"><span class="sum-label">Ticket médio</span><span class="sum-val">R$ 19.209</span></div></div></div><div class="sum-card"><div class="sum-card-title">Top 10 Estados por Valor <span style="font-size:8px;color:var(--accent)">· clique para ver contratos</span></div><div class="sum-rows" id="estadoCardRows"><div style="padding:20px;text-align:center;font-family:var(--mono);font-size:10px;color:var(--muted)">Carregando...</div></div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="VALERIOTE CURSOS, CONSULTORI…">VALERIOTE CURSOS, CONSULTORI…</div></div></div><div class="sum-row"><span class="sum-label"><span class="uf">DF</span>&nbsp;R$ 1.750.943</span><div style="text-align:right"><div class="sum-val">87 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="CONNECT ON MARKETING DE EVEN…">CONNECT ON MARKETING DE EVEN…</div></div></div><div class="sum-row"><span class="sum-label"><span class="uf">SP</span>&nbsp;R$ 1.266.510</span><div style="text-align:right"><div class="sum-val">45 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="INSTITUTO PROTEGE ESCOLA BRA…">INSTITUTO PROTEGE ESCOLA BRA…</div></div></div><div class="sum-row"><span class="sum-label"><span class="uf">SC</span>&nbsp;R$ 863.480</span><div style="text-align:right"><div class="sum-val">32 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="LICITO GURU TECNOLOGIA E EDU…">LICITO GURU TECNOLOGIA E EDU…</div></div></div><div class="sum-row"><span class="sum-label"><span class="uf">MG</span>&nbsp;R$ 795.124</span><div style="text-align:right"><div class="sum-val">92 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="INSTITUTO DE DESENVOLVIMENTO…">INSTITUTO DE DESENVOLVIMENTO…</div></div></div><div class="sum-row"><span class="sum-label"><span class="uf">GO</span>&nbsp;R$ 705.158</span><div style="text-align:right"><div class="sum-val">59 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="EXCELENCIA EDUCACAO E ENSINO…">EXCELENCIA EDUCACAO E ENSINO…</div></div></div><div class="sum-row"><span class="sum-label"><span class="uf">CE</span>&nbsp;R$ 678.884</span><div style="text-align:right"><div class="sum-val">18 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="SEGE - SISTEMAS DE EDUCACAO …">SEGE - SISTEMAS DE EDUCACAO …</div></div></div><div class="sum-row"><span class="sum-label"><span class="uf">RO</span>&nbsp;R$ 617.455</span><div style="text-align:right"><div class="sum-val">22 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="LICITO GURU TECNOLOGIA E EDU…">LICITO GURU TECNOLOGIA E EDU…</div></div></div><div class="sum-row"><span class="sum-label"><span class="uf">SE</span>&nbsp;R$ 541.647</span><div style="text-align:right"><div class="sum-val">10 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="DLSJ-DISTRIBUIDORA DE LIVROS…">DLSJ-DISTRIBUIDORA DE LIVROS…</div></div></div><div class="sum-row"><span class="sum-label"><span class="uf">MA</span>&nbsp;R$ 533.502</span><div style="text-align:right"><div class="sum-val">24 contratos</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:1px" title="SLA NEGOCIOS LTDA">SLA NEGOCIOS LTDA</div></div></div></div></div><div class="sum-card"><div class="sum-card-title">Top 10 Concorrentes por Valor</div><div class="sum-rows" id="fornCardRows"><div style="padding:20px;text-align:center;font-family:var(--mono);font-size:10px;color:var(--muted)">Carregando...</div></div><div class="sum-row"><span class="sum-label" title="LICITO GURU TECNOLOGIA E EDUCACAO LTDA">LICITO GURU TECNOLOGIA E E…</span><span class="sum-val">R$ 939.912</span></div><div class="sum-row"><span class="sum-label" title="VALERIOTE CURSOS, CONSULTORIA, GESTAO E EMPREENDIMENTOS LTDA">VALERIOTE CURSOS, CONSULTO…</span><span class="sum-val">R$ 819.109</span></div><div class="sum-row"><span class="sum-label" title="startgov solucoes em tecnologia ltda">startgov solucoes em tecno…</span><span class="sum-val">R$ 769.056</span></div><div class="sum-row"><span class="sum-label" title="ORZIL CONSULTORIA E TREINAMENTO LTDA">ORZIL CONSULTORIA E TREINA…</span><span class="sum-val">R$ 741.625</span></div><div class="sum-row"><span class="sum-label" title="INSTITUTO NEGOCIOS PUBLICOS DO BRASIL - ESTUDOS E PESQUISAS NA ADMINISTRACAO PUBLICA - INP - LTDA">INSTITUTO NEGOCIOS PUBLICO…</span><span class="sum-val">R$ 564.234</span></div><div class="sum-row"><span class="sum-label" title="SEGE - SISTEMAS DE EDUCACAO E GESTAO DE EXCELENCIA LTDA">SEGE - SISTEMAS DE EDUCACA…</span><span class="sum-val">R$ 488.711</span></div><div class="sum-row"><span class="sum-label" title="DLSJ-DISTRIBUIDORA DE LIVROS SAO JOSE LTDA">DLSJ-DISTRIBUIDORA DE LIVR…</span><span class="sum-val">R$ 482.028</span></div><div class="sum-row"><span class="sum-label" title="VIRTÚ SOLUÇÕES EM GESTÃO PÚBLICA LTDA">VIRTÚ SOLUÇÕES EM GESTÃO P…</span><span class="sum-val">R$ 444.935</span></div><div class="sum-row"><span class="sum-label" title="INSTITUTO PROTEGE ESCOLA BRASIL LTDA">INSTITUTO PROTEGE ESCOLA B…</span><span class="sum-val">R$ 418.084</span></div></div></div></div>
 <div class="charts-2"><div class="chart-card"><div class="chart-title">Valor Acumulado por Estado — Top 10 <span style="color:var(--accent)">↗ clicável</span></div><div class="chart-hint">Clique em qualquer barra para ver os contratos daquele estado</div><div style="height:280px"><canvas id="cEstado"></canvas></div></div><div class="chart-card"><div class="chart-title">Distribuição por Estado — Top 5 + Outros</div><div style="height:280px"><canvas id="cPie"></canvas></div></div></div>
 <div class="chart-card full"><div class="chart-title">Comparativo de Empresas — Valor Acumulado <span style="color:var(--accent)">↗ clicável</span></div><div class="chart-legend"><span class="ldot" style="background:#22c55e"></span>Brasil Planeja<span class="ldot" style="background:#4f8eff;margin-left:8px"></span>Concorrentes</div><div style="height:380px"><canvas id="cForn"></canvas></div></div>
 <div class="charts-2"><div class="chart-card"><div class="chart-title">Quantidade de Contratos por Estado <span style="color:var(--accent)">↗ clicável</span></div><div style="height:250px"><canvas id="cQtd"></canvas></div></div><div class="chart-card"><div class="chart-title">Ticket Médio por Estado <span style="color:var(--accent)">↗ clicável</span></div><div style="height:250px"><canvas id="cTicket"></canvas></div></div></div>
@@ -396,11 +396,100 @@ function openModal(estado){
 function closeModal(){document.getElementById('modalOverlay').classList.remove('open');}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
+// Abre modal por estado (chamado pelas linhas clicáveis do card)
+function openEstadoModal(estado){openModal(estado);}
+
+// Abre modal por fornecedor normalizado
+function openFornModal(fornNorm){
+  const cs=ALL.filter(c=>c.fornNorm===fornNorm);
+  const total=cs.reduce((a,c)=>a+c.valorNum,0);
+  const label=cs[0]?cs[0].fornecedor:'—';
+  document.getElementById('modalTitle').textContent=label.substring(0,60)+(label.length>60?'…':'');
+  document.getElementById('modalSub').textContent=cs.length+' contratos · Total: '+fmtR(total);
+  const tbody=document.getElementById('modalTbody');tbody.innerHTML='';
+  cs.sort((a,b)=>b.valorNum-a.valorNum).forEach((c,i)=>{
+    const tr=document.createElement('tr');
+    const org=(c.orgao||'').substring(0,34)+((c.orgao||'').length>34?'…':'');
+    const cidade=(c.cidade&&c.estado)?c.cidade+'/'+c.estado:'—';
+    tr.innerHTML='<td class="mn mt">'+(i+1)+'</td>'
+      +'<td title="'+c.orgao+'">'+org+'</td>'
+      +'<td class="mn" style="color:#a78bfa">'+cidade+'</td>'
+      +'<td class="mn val">'+c.valor+'</td>'
+      +'<td class="mn mt">'+c.dataAssinatura+'</td>'
+      +'<td><a class="lnk" href="'+c.link+'" target="_blank">↗ Ver</a></td>';
+    tbody.appendChild(tr);
+  });
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
 let RES={},running=false,cur=0,timer=null,disp=[...ALL],sCol='idx',sAsc=true;
 function initApp(){
   try{const s=localStorage.getItem('pncp_v5');if(s)RES=JSON.parse(s);}catch(e){}
-  buildCharts();updateKpis();applyF();
+  buildCharts();buildEstadoCard();buildFornCard();updateKpis();applyF();
   document.querySelectorAll('th[data-col]').forEach(th=>th.addEventListener('click',()=>sortBy(th.dataset.col)));
+}
+
+function buildEstadoCard(){
+  // Agrega por estado
+  const byE={};
+  ALL.forEach(c=>{
+    const e=c.estado||'ND';
+    if(!byE[e]) byE[e]={val:0,n:0,emps:{}};
+    byE[e].val+=c.valorNum; byE[e].n++;
+    const fk=c.fornNorm||'ND';
+    if(!byE[e].emps[fk]) byE[e].emps[fk]={val:0,n:0,label:c.fornecedor};
+    byE[e].emps[fk].val+=c.valorNum; byE[e].emps[fk].n++;
+  });
+  const sorted=Object.entries(byE).sort((a,b)=>b[1].val-a[1].val).slice(0,10);
+  const el=document.getElementById('estadoCardRows');
+  if(!el) return;
+  el.innerHTML='';
+  sorted.forEach(([e,v])=>{
+    const topEmp=Object.entries(v.emps).sort((a,b)=>b[1].val-a[1].val)[0];
+    const empLabel=topEmp?topEmp[1].label:'—';
+    const empNorm=topEmp?topEmp[0]:'';
+    const empShort=empLabel.substring(0,32)+(empLabel.length>32?'…':'');
+    const row=document.createElement('div');
+    row.className='sum-row clickable';
+    row.title='Clique para ver todos os contratos de '+e;
+    row.onclick=()=>openEstadoModal(e);
+    row.innerHTML=
+      '<span class="sum-label"><span class="uf">'+e+'</span>&nbsp;'+fmtR(v.val)+'</span>'
+      +'<div style="text-align:right">'
+      +'<div class="sum-val">'+v.n+' contratos</div>'
+      +'<div style="font-family:var(--mono);font-size:9px;color:#6060a0;margin-top:1px;cursor:pointer" '
+      +'onclick="event.stopPropagation();openFornModal(''+empNorm.replace(/'/g,"\'")+'')" '
+      +'title="Ver contratos de '+empLabel+': clique">'
+      +empShort+'</div>'
+      +'</div>';
+    el.appendChild(row);
+  });
+}
+
+function buildFornCard(){
+  const byF={};
+  ALL.forEach(c=>{
+    const fk=c.fornNorm||'ND';
+    if(!byF[fk]) byF[fk]={val:0,n:0,label:c.fornecedor};
+    byF[fk].val+=c.valorNum; byF[fk].n++;
+  });
+  const sorted=Object.entries(byF)
+    .filter(([k])=>!k.includes('BRASIL PLANEJA'))
+    .sort((a,b)=>b[1].val-a[1].val).slice(0,10);
+  const el=document.getElementById('fornCardRows');
+  if(!el) return;
+  el.innerHTML='';
+  sorted.forEach(([fk,v])=>{
+    const short=v.label.substring(0,26)+(v.label.length>26?'…':'');
+    const row=document.createElement('div');
+    row.className='sum-row clickable';
+    row.title='Ver contratos de '+v.label;
+    row.onclick=()=>openFornModal(fk);
+    row.innerHTML=
+      '<span class="sum-label" title="'+v.label+'">'+short+'</span>'
+      +'<span class="sum-val">'+fmtR(v.val)+'</span>';
+    el.appendChild(row);
+  });
 }
 const key=c=>c.cnpj+'_'+c.ano+'_'+c.seq;
 const save=()=>{try{localStorage.setItem('pncp_v5',JSON.stringify(RES));}catch(e){}};
