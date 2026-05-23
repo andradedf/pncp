@@ -378,48 +378,38 @@ async function fetchBaserowAll(){
   return rows;
 }
 
-// Detecta o mapeamento de campos do Baserow na primeira linha
-let _fieldMap = null;
+// ── Mapeamento fixo do Baserow ─────────────────────────────
+// Corrige importação em que o Baserow renomeou as colunas para field_6758, field_6759...
+const _fieldMap = {
+  local: 'field_6758',
+  orgao: 'field_6759',
+  cnpjOrgao: 'field_6760',
+
+  objeto: 'field_6761',
+  valorContratado: 'field_6762',
+  valorContratadoFormatado: 'field_6763',
+
+  fornecedorRazaoSocial: 'field_6764',
+  fornecedorCnpjCpf: 'field_6765',
+
+  dataAssinatura: 'field_6766',
+  vigenciaFim: 'field_6767',
+
+  linkPNCP: 'field_6768',
+  idContratoPNCP: 'field_6769',
+
+  processo: 'field_6770',
+  tipo: 'field_6771'
+};
+
 function detectFieldMap(r){
-  if(_fieldMap) return;
-  _fieldMap = {};
-  const keys = Object.keys(r);
-  // Log para debug no console
-  console.log('[PNCP] Campos do Baserow:', keys);
+  console.log('[PNCP] Mapeamento fixo carregado:', _fieldMap);
   console.log('[PNCP] Exemplo de linha:', r);
-  // Tenta mapear pelos nomes exatos ou por similaridade
-  const candidates = {
-    local: ['local'],
-    orgao: ['orgao','órgão','orgão'],
-    cnpjOrgao: ['cnpjorgao','cnpjórgão','cnpj_orgao'],
-    objeto: ['objeto'],
-    valorContratado: ['valorcontratado','valor_contratado','valor contratado'],
-    valorContratadoFormatado: ['valorcontratadoformatado','valor_contratado_formatado'],
-    fornecedorRazaoSocial: ['fornecedorrazaosocial','fornecedor_razao_social','fornecedorrazãosocial','razaosocial'],
-    fornecedorCnpjCpf: ['fornecedorcnpjcpf','fornecedor_cnpj_cpf','cnpj'],
-    dataAssinatura: ['dataassinatura','data_assinatura','data assinatura'],
-    vigenciaFim: ['vigenciafim','vigencia_fim','vigência_fim'],
-    linkPNCP: ['linkpncp','link_pncp','link'],
-    idContratoPNCP: ['idcontratopncp','id_contrato_pncp'],
-    processo: ['processo'],
-  };
-  keys.forEach(k => {
-    const kl = k.toLowerCase().replace(/[^a-z0-9]/g,'');
-    Object.entries(candidates).forEach(([field, alts]) => {
-      if(!_fieldMap[field] && alts.some(a => a.replace(/[^a-z0-9]/g,'') === kl)) {
-        _fieldMap[field] = k;
-      }
-    });
-    // fallback: nome exato
-    if(!_fieldMap[k] && candidates[k]) _fieldMap[k] = k;
-  });
-  console.log('[PNCP] Mapeamento de campos:', _fieldMap);
 }
 
 function g(r, field){
-  if(!_fieldMap) return '';
   const k = _fieldMap[field];
-  return k ? (r[k]||'') : '';
+  return k ? (r[k] || '') : '';
 }
 
 function mapRow(r){
