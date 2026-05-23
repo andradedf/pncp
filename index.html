@@ -431,7 +431,6 @@ function initApp(){
 }
 
 function buildEstadoCard(){
-  // Agrega por estado
   const byE={};
   ALL.forEach(c=>{
     const e=c.estado||'ND';
@@ -450,19 +449,26 @@ function buildEstadoCard(){
     const empLabel=topEmp?topEmp[1].label:'—';
     const empNorm=topEmp?topEmp[0]:'';
     const empShort=empLabel.substring(0,32)+(empLabel.length>32?'…':'');
+    // Row principal — clica no estado
     const row=document.createElement('div');
     row.className='sum-row clickable';
-    row.title='Clique para ver todos os contratos de '+e;
+    row.title='Ver contratos de '+e;
     row.onclick=()=>openEstadoModal(e);
-    row.innerHTML=
-      '<span class="sum-label"><span class="uf">'+e+'</span>&nbsp;'+fmtR(v.val)+'</span>'
-      +'<div style="text-align:right">'
-      +'<div class="sum-val">'+v.n+' contratos</div>'
-      +'<div style="font-family:var(--mono);font-size:9px;color:#6060a0;margin-top:1px;cursor:pointer" '
-      +'onclick="event.stopPropagation();openFornModal(''+empNorm.replace(/'/g,"\'")+'')" '
-      +'title="Ver contratos de '+empLabel+': clique">'
-      +empShort+'</div>'
-      +'</div>';
+    // Sub-div da empresa — clica na empresa (sem onclick inline)
+    const empDiv=document.createElement('div');
+    empDiv.style.cssText='font-family:var(--mono);font-size:9px;color:#5a7a99;margin-top:1px;cursor:pointer';
+    empDiv.title='Ver contratos de '+empLabel;
+    empDiv.textContent=empShort;
+    empDiv.addEventListener('click',function(ev){ev.stopPropagation();openFornModal(empNorm);});
+    const rightDiv=document.createElement('div');
+    rightDiv.style.textAlign='right';
+    const cntDiv=document.createElement('div');
+    cntDiv.className='sum-val'; cntDiv.textContent=v.n+' contratos';
+    rightDiv.appendChild(cntDiv); rightDiv.appendChild(empDiv);
+    const leftSpan=document.createElement('span');
+    leftSpan.className='sum-label';
+    leftSpan.innerHTML='<span class="uf">'+e+'</span>&nbsp;'+fmtR(v.val);
+    row.appendChild(leftSpan); row.appendChild(rightDiv);
     el.appendChild(row);
   });
 }
@@ -485,186 +491,13 @@ function buildFornCard(){
     const row=document.createElement('div');
     row.className='sum-row clickable';
     row.title='Ver contratos de '+v.label;
-    row.onclick=()=>openFornModal(fk);
-    row.innerHTML=
-      '<span class="sum-label" title="'+v.label+'">'+short+'</span>'
-      +'<span class="sum-val">'+fmtR(v.val)+'</span>';
+    row.addEventListener('click',function(){openFornModal(fk);});
+    const lSpan=document.createElement('span');
+    lSpan.className='sum-label'; lSpan.title=v.label; lSpan.textContent=short;
+    const rSpan=document.createElement('span');
+    rSpan.className='sum-val'; rSpan.textContent=fmtR(v.val);
+    row.appendChild(lSpan); row.appendChild(rSpan);
     el.appendChild(row);
   });
 }
-const key=c=>c.cnpj+'_'+c.ano+'_'+c.seq;
-const save=()=>{try{localStorage.setItem('pncp_v5',JSON.stringify(RES));}catch(e){}};
-function buildCharts(){
-  const gc='rgba(255,255,255,.05)',tc='#6868a0';
-  const base={responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmtR(ctx.raw)}}},
-    scales:{x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}},
-            y:{ticks:{color:tc,font:{size:9},callback:v=>fmtR(v)},grid:{color:gc}}}};
-
-  // Bar estado — clicável
-  const cEstado=new Chart(document.getElementById('cEstado'),{type:'bar',
-    data:{labels:E_LABELS,datasets:[{data:E_VALS,backgroundColor:E_LABELS.map((_,i)=>COLORS[i%COLORS.length]),borderRadius:3,borderSkipped:false,hoverBackgroundColor:E_LABELS.map((_,i)=>COLORS[i%COLORS.length]+'dd')}]},
-    options:{...base,onClick:(e,els)=>{if(els.length>0){const idx=els[0].index;openModal(E_LABELS[idx]);}},
-      onHover:(e,els)=>{e.native.target.style.cursor=els.length>0?'pointer':'default';}}});
-
-  new Chart(document.getElementById('cPie'),{type:'doughnut',
-    data:{labels:P_LABELS,datasets:[{data:P_VALS,backgroundColor:COLORS.slice(0,P_LABELS.length),borderColor:'#0d0d10',borderWidth:2}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{
-      legend:{position:'right',labels:{color:tc,font:{size:10},boxWidth:12,padding:10}},
-      tooltip:{callbacks:{label:ctx=>{const t=P_VALS.reduce((a,b)=>a+b,0);return ' '+fmtR(ctx.raw)+' ('+Math.round(ctx.raw/t*100)+'%)';}}}}}});
-
-  // Bar fornecedores — clicável (filtra tabela busca)
-  // Mapa norm->contratos para o gráfico de fornecedores
-  const FORN_MAP={};
-  ALL.forEach(c=>{const k=c.fornNorm;if(!FORN_MAP[k])FORN_MAP[k]=[];FORN_MAP[k].push(c);});
-
-  new Chart(document.getElementById('cForn'),{type:'bar',
-    data:{labels:F_LABELS,datasets:[{data:F_VALS,backgroundColor:F_COLORS,borderRadius:3,borderSkipped:false}]},
-    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmtR(ctx.raw)+' · '+F_NS[ctx.dataIndex]+' contratos'}}},
-      onClick:(e,els)=>{
-        if(els.length>0){
-          const idx=els[0].index;
-          const label=F_LABELS[idx];
-          const rawLabel=label.replace('★ ','');
-          // busca contratos por fornNorm correspondente
-          const match=Object.entries(FORN_MAP).find(([k,_])=>k.includes(rawLabel.substring(0,10).toUpperCase())||rawLabel.includes('BRASIL PLANEJA')&&k.includes('BRASIL PLANEJA'));
-          const cs=match?match[1]:[];
-          const total=cs.reduce((a,c)=>a+c.valorNum,0);
-          document.getElementById('modalTitle').textContent='Contratos — '+label;
-          document.getElementById('modalSub').textContent=cs.length+' contratos · Total: '+fmtR(total);
-          const tbody=document.getElementById('modalTbody');tbody.innerHTML='';
-          cs.sort((a,b)=>b.valorNum-a.valorNum).forEach((c,i)=>{
-            const tr=document.createElement('tr');
-            const forn=(c.fornecedor||'').substring(0,38)+((c.fornecedor||'').length>38?'…':'');
-            const org=(c.orgao||'').substring(0,34)+((c.orgao||'').length>34?'…':'');
-            tr.innerHTML='<td class="mn mt">'+(i+1)+'</td>'
-              +'<td title="'+c.orgao+'">'+org+'</td>'
-              +'<td style="color:#c4b5fd" title="'+c.fornecedor+'">'+forn+'</td>'
-              +'<td class="mn val">'+c.valor+'</td>'
-              +'<td class="mn mt">'+c.dataAssinatura+'</td>'
-              +'<td><a class="lnk" href="'+c.link+'" target="_blank">↗ Ver</a></td>';
-            tbody.appendChild(tr);
-          });
-          document.getElementById('modalOverlay').classList.add('open');
-        }
-      },
-      onHover:(e,els)=>{e.native.target.style.cursor=els.length>0?'pointer':'default';},
-      scales:{x:{ticks:{color:tc,font:{size:9},callback:v=>fmtR(v)},grid:{color:gc}},
-              y:{ticks:{color:tc,font:{size:10}},grid:{color:gc}}}}});
-
-  new Chart(document.getElementById('cQtd'),{type:'bar',
-    data:{labels:E_LABELS,datasets:[{data:E_COUNTS,backgroundColor:'rgba(79,142,255,.5)',borderColor:'#4f8eff',borderWidth:1,borderRadius:3}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.raw+' contratos'}}},
-      onClick:(e,els)=>{if(els.length>0)openModal(E_LABELS[els[0].index]);},
-      onHover:(e,els)=>{e.native.target.style.cursor=els.length>0?'pointer':'default';},
-      scales:{x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}},y:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}}}});
-
-  new Chart(document.getElementById('cTicket'),{type:'bar',
-    data:{labels:E_LABELS,datasets:[{data:E_TICKETS,backgroundColor:'rgba(124,58,237,.5)',borderColor:'#7c3aed',borderWidth:1,borderRadius:3}]},
-    options:{...base,onClick:(e,els)=>{if(els.length>0)openModal(E_LABELS[els[0].index]);},
-      onHover:(e,els)=>{e.native.target.style.cursor=els.length>0?'pointer':'default';}}});
-}
-function startF(){
-  if(running)return;running=true;
-  document.getElementById('btnS').disabled=true;document.getElementById('btnP').disabled=false;
-  document.getElementById('progW').classList.add('on');
-  while(cur<ALL.length&&RES[key(ALL[cur])])cur++;nextF();
-}
-function pauseF(){
-  running=false;clearTimeout(timer);
-  document.getElementById('btnS').disabled=false;document.getElementById('btnP').disabled=true;
-  plog('⏸ Pausado em '+cur+' / '+ALL.length);
-}
-function nextF(){
-  if(!running)return;
-  while(cur<ALL.length&&RES[key(ALL[cur])])cur++;
-  if(cur>=ALL.length){running=false;document.getElementById('btnS').disabled=true;
-    document.getElementById('btnP').disabled=true;setProg(ALL.length,ALL.length);plog('✓ Concluído');return;}
-  const c=ALL[cur];setProg(cur,ALL.length);
-  plog('→ ['+(cur+1)+'/'+ALL.length+'] '+c.orgao.substring(0,50));
-  fetchOne(c).then(r=>{RES[key(c)]=r;save();updateKpis();refreshRow(c);cur++;
-    timer=setTimeout(nextF,parseInt(document.getElementById('spd').value)||800);});
-}
-async function fetchOne(c){
-  const url='https://pncp.gov.br/api/pncp/v1/orgaos/'+c.cnpj+'/contratos/'+c.ano+'/'+parseInt(c.seq);
-  try{
-    const r=await fetch(url,{headers:{'Accept':'application/json'},signal:AbortSignal.timeout(12000)});
-    if(!r.ok)throw new Error('HTTP '+r.status);return extract(await r.json());
-  }catch(e){return{status:'error',nome:'',tel:'',email:'',cpf:'',msg:e.message};}
-}
-function extract(j){
-  const p=(...a)=>{for(const v of a)if(v)return v;return '';};
-  const res={status:'empty',
-    nome:p(j&&j.usuarioNome,j&&j.responsavel&&j.responsavel.nome,j&&j.nomeResponsavel,j&&j.cadastradoPor&&j.cadastradoPor.nome),
-    tel: p(j&&j.usuarioTelefone,j&&j.responsavel&&j.responsavel.telefone,j&&j.telefone,j&&j.cadastradoPor&&j.cadastradoPor.telefone),
-    email:p(j&&j.usuarioEmail,j&&j.responsavel&&j.responsavel.email,j&&j.email,j&&j.cadastradoPor&&j.cadastradoPor.email),
-    cpf: p(j&&j.usuarioCpfCnpj,j&&j.responsavel&&j.responsavel.cpfCnpj,j&&j.cadastradoPor&&j.cadastradoPor.cpfCnpj),
-  };
-  const raw=JSON.stringify(j);
-  if(!res.tel){const m=raw.match(/\b(\(?\d{2}\)?\s?\d{4,5}[-\s]?\d{4})\b/);if(m)res.tel=m[1];}
-  if(!res.email){const m=raw.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);if(m&&!m[0].includes('pncp.gov'))res.email=m[0];}
-  res.status=(res.nome||res.tel||res.email||res.cpf)?'found':'empty';return res;
-}
-function setProg(d,t){const p=t>0?Math.round(d/t*100):0;
-  document.getElementById('progFill').style.width=p+'%';document.getElementById('progPct').textContent=p+'%';
-  document.getElementById('progL').textContent='Processando '+d+' de '+t+' contratos';}
-function plog(msg){const el=document.getElementById('progLog');const d=document.createElement('div');
-  d.textContent=msg;el.appendChild(d);if(el.children.length>3)el.removeChild(el.firstChild);}
-function updateKpis(){const vs=Object.values(RES);const found=vs.filter(r=>r.status==='found').length;
-  document.getElementById('kDone').textContent=vs.length;document.getElementById('kFound').textContent=found;
-  document.getElementById('kTel').textContent=vs.filter(r=>r.tel).length;
-  document.getElementById('kEmail').textContent=vs.filter(r=>r.email).length;
-  document.getElementById('kEmpty').textContent=vs.filter(r=>r.status==='empty').length;
-  document.getElementById('kPend').textContent=Math.max(0,ALL.length-vs.length);
-  document.getElementById('liveTag').textContent='● '+found+' com contato';}
-function applyF(){
-  const q=document.getElementById('fq').value.toLowerCase(),uf=document.getElementById('fuf').value,
-    fn=document.getElementById('fforn').value,st=document.getElementById('fst').value;
-  disp=ALL.filter(c=>{
-    if(uf&&c.estado!==uf)return false;
-    if(fn&&c.fornecedor!==fn)return false;
-    if(st){const r=RES[key(c)];if(st==='pending'&&r)return false;
-      if(st!=='pending'&&(!r||r.status!==st))return false;}
-    if(q&&!(c.orgao+c.fornecedor+c.cidade+c.estado+c.objeto+c.idContratoPNCP).toLowerCase().includes(q))return false;
-    return true;});
-  document.getElementById('tblCnt').textContent=disp.length+' registros';rebuildTable();}
-function clearF(){['fq','fuf','fforn','fst'].forEach(id=>{document.getElementById(id).value='';});applyF();}
-function sortBy(col){sAsc=sCol===col?!sAsc:true;sCol=col;
-  document.querySelectorAll('th[data-col]').forEach(th=>{th.classList.remove('sort-asc','sort-desc');
-    if(th.dataset.col===col)th.classList.add(sAsc?'sort-asc':'sort-desc');});rebuildTable();}
-function rebuildTable(){
-  const sorted=[...disp].sort((a,b)=>{
-    if(sCol==='idx')return(ALL.indexOf(a)-ALL.indexOf(b))*(sAsc?1:-1);
-    if(sCol==='valorNum')return(a.valorNum-b.valorNum)*(sAsc?1:-1);
-    const va=(a[sCol]||'').toLowerCase(),vb=(b[sCol]||'').toLowerCase();
-    return va<vb?(sAsc?-1:1):va>vb?(sAsc?1:-1):0;});
-  const body=document.getElementById('tbody');body.innerHTML='';
-  sorted.forEach((c,i)=>{const tr=document.createElement('tr');
-    tr.id='r_'+key(c);tr.innerHTML=buildRow(i+1,c,RES[key(c)]);body.appendChild(tr);});}
-function buildRow(n,c,r){
-  let badge,nome='—',tel='—',email='—';
-  if(!r)badge='<span class="badge b-wait">Aguardando</span>';
-  else if(r.status==='error')badge='<span class="badge b-err">✕ Erro</span>';
-  else if(r.status==='empty')badge='<span class="badge b-emp">Sem dado</span>';
-  else{badge='<span class="badge b-ok">✓ Encontrado</span>';nome=r.nome||'—';tel=r.tel||'—';email=r.email||'—';}
-  const uf=c.estado?'<span class="uf">'+c.estado+'</span>':'—';
-  const forn=(c.fornecedor||'').substring(0,36)+((c.fornecedor||'').length>36?'…':'');
-  const org=(c.orgao||'').substring(0,32)+((c.orgao||'').length>32?'…':'');
-  return '<td class="mn mt">'+n+'</td><td>'+badge+'</td><td>'+uf+'</td>'
-    +'<td class="mn" style="font-size:10px">'+(c.cidade||'—')+'</td>'
-    +'<td title="'+c.orgao+'">'+org+'</td>'
-    +'<td class="forn" style="font-size:11px">'+forn+'</td>'
-    +'<td class="mn val" style="font-size:10px">'+c.valor+'</td>'
-    +'<td class="mn mt" style="font-size:10px">'+(c.dataAssinatura||'—')+'</td>'
-    +'<td style="font-size:12px">'+nome+'</td>'
-    +'<td class="mn" style="font-size:10px">'+tel+'</td>'
-    +'<td class="mn" style="font-size:10px">'+email+'</td>'
-    +'<td><a class="lnk" href="'+c.link+'" target="_blank">↗ Ver</a></td>';}
-function refreshRow(c){const tr=document.getElementById('r_'+key(c));if(!tr)return;
-  const i=disp.indexOf(c);if(i>=0)tr.innerHTML=buildRow(i+1,c,RES[key(c)]);}
-
-</script>
-</body>
-</html>
+>
